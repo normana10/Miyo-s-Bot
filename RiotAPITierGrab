@@ -1,0 +1,94 @@
+import java.util.List;
+import java.util.Map;
+
+import dto.League.League;
+import dto.Stats.*;
+import constant.Region;
+import dto.Summoner.Summoner;
+import main.java.riotapi.RiotApi;
+import main.java.riotapi.RiotApiException;
+
+import com.google.gson.Gson;
+
+import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+//import com.google.gson*;
+import java.net.URL;
+
+public class Bot {
+	public static void main(String[]args) throws RiotApiException, IOException{
+		Scanner scan = new Scanner(System.in);
+		RiotApi api = new RiotApi("a1084308-ba7f-4f46-8d63-4ec487b01fb1");
+		api.setRegion(Region.NA);
+		String nameKnow = "gibberish";
+		long sumId = 5;
+		String tier = null;
+		//Map<String, List<League>> leg = new League();
+		System.out.println("Do you know your sumId? (yes or no)");
+		nameKnow = scan.nextLine();
+		String apiKey = "a1084308-ba7f-4f46-8d63-4ec487b01fb1";
+		String region = "na";
+		URL url;
+		String line = "";
+		String urlIns;
+		
+		while (!(nameKnow.equalsIgnoreCase("yes")) && !(nameKnow.equalsIgnoreCase("no"))){
+			System.out.println("You have  entered an invalid answer. Make sure you type yes or no.");
+			System.out.println();
+			System.out.println("Do you know your sumId? (yes or no)");
+			nameKnow = scan.nextLine();
+		}
+		
+		if (nameKnow.equalsIgnoreCase("no")){
+			System.out.println("");
+			System.out.println("(BETA)Enter your summoner name (not login name)");
+			String sumName = scan.nextLine();
+			sumName = sumName.replaceAll("\\s", "");
+			sumId = api.getSummonerByName(sumName).get(sumName).getId();
+		}
+		
+		if (nameKnow.equalsIgnoreCase("yes")){
+			System.out.println("");
+			System.out.println("Pls enter id:");
+			String summId = scan.next();
+		}
+		
+		if (nameKnow.equalsIgnoreCase("no")){
+			System.out.println("");
+			System.out.println("For future reference, your sum ID is:");
+			System.out.println(sumId);
+		}
+		
+		urlIns = "https://na.api.pvp.net/api/lol/" + region + "/v2.2/matchhistory/" + sumId + "?api_key=" + apiKey;
+		url = new URL(urlIns);
+		
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
+				line = reader.readLine();
+		}
+		
+		if (line.contains("CHALLENGER")){
+			tier = "Challenger";
+		}else if (line.contains("MASTER")){
+			tier = "Master";
+		}else if (line.contains("DIAMOND")){
+			tier = "Diamond";
+		}else if (line.contains("PLATINUM")){
+			tier = "Platinum";
+		}else if (line.contains("GOLD")){
+			tier = "Gold";
+		}else if (line.contains("SILVER")){
+			tier = "Silver";
+		}else if (line.contains("BRONZE")){
+			tier = "Bronze";
+		}
+		
+		System.out.println("");
+		System.out.println("Your Tier is:");
+		System.out.println(tier);
+		
+		
+	}
+}
