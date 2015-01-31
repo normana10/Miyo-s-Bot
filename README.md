@@ -1,1 +1,3 @@
 # Miyo-s-Bot
+
+This is a TS3 Server bot in Alpha at the moment. More to come later....
