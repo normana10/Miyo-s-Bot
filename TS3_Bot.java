@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Random;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -57,6 +59,62 @@ public class TS3_Bot {
 		final int diamond = 11;
 		final int master = 10;
 		final int challenger = 9;
+			//Special Tourney only groups
+		final int TunRanked = 100000000;
+		final int Tbronze = 20;
+		final int Tsilver = 21;
+		final int Tgold = 22;
+		final int Tplatinum = 23;
+		final int Tdiamond = 24;
+		final int Tmaster = 25;
+		final int Tchallenger = 26;
+		
+		final int Team1 = 27;
+		final int Team2 = 27;
+		final int Team3 = 27;
+		final int Team4 = 27;
+		final int Team5 = 27;
+		final int Team6 = 27;
+		final int Team7 = 27;
+		final int Team8 = 27;
+		final int Team9 = 27;
+		final int Team10 = 27;
+		final int Team11 = 27;
+		final int Team12 = 27;
+		final int Team13 = 27;
+		final int Team14 = 27;
+		final int Team15 = 27;
+		
+		//Tier Channel Ids
+			//Division Waiting Rooms
+		final int bronzeWR = 21;
+		final int silverWR = 23;
+		final int goldWR = 24;
+		final int platWR = 25;
+		final int diamondWR = 26;
+		final int masterWR = 27;
+		final int challengerWR = 28;
+			//Tourney Team Channels
+		final int team1 = 30;
+		final int team2 = 31;
+		final int team3 = 32;
+		final int team4 = 33;
+		final int team5 = 34;
+		final int team6 = 35;
+		final int team7 = 36;
+		final int team8 = 37;
+		final int team9 = 38;
+		final int team10 = 39;
+		final int team11 = 40;
+		final int team12 = 41;
+		final int team13 = 42;
+		final int team14 = 43;
+		final int team15 = 44;
+		
+			//OtherImportantGroupId
+		final int verifiedGroupId = 19;
+		
+		final Random rng = new Random();
 		
 		TS3Config config = new TS3Config();
 		config.setHost("10.0.1.222");
@@ -69,7 +127,7 @@ public class TS3_Bot {
 		final TS3Api api = query.getApi();
 		api.selectVirtualServerByPort(9987);
 		api.setNickname("Botbot");
-		api.sendServerMessage("Bot Online!");
+		api.sendServerMessage("Botbot Online!");
 		final List<ServerGroupClient> admins = api.getServerGroupClients(6);
 		
 		api.registerAllEvents();
@@ -81,12 +139,28 @@ public class TS3_Bot {
 			boolean exit = false;
 			String botName = "Botbot";
 			String nameId = "";
+			String tourneyStarter = "";
 			boolean tourney = false;
+			int test = 6;
+			int myCId = 0;
+			boolean continueTourneyStart = true;
+			boolean registerEnabled = false;
+			int tourneyUsers = 0;
+			int numberOfTeams = 0;
+			List list = new ArrayList();
+			
+			
+			//TODO 
 			
 			public void onTextMessage(TextMessageEvent e) {
+				if (e.getInvokerName().toLowerCase().equals(botName)){
+					myCId = e.getInvokerId();
+				}
 				if (alive && !e.getInvokerName().equals(botName)){
+					
 					if (e.getMessage().toLowerCase().contains("hello " + botName.toLowerCase()) && e.getTargetMode() == TextMessageTargetMode.CHANNEL){
 						api.sendChannelMessage("Hello " + e.getInvokerName() + "!");
+						api.sendChannelMessage(api.getServerGroupClients(verifiedGroupId).get(1).getUniqueIdentifier());
 					}
 					if (e.getMessage().toLowerCase().contains("!status")){
 						api.sendServerMessage("I'm currently alive and well!!!");
@@ -104,25 +178,78 @@ public class TS3_Bot {
 							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!name[/b][/color] = allows you to change the name of " + botName);
 							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!enabletourney[/color][/b] = [b]MUST[/b] be called before starting a tourney, safety switch.");
 							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!startthetourney[/b][/color] = Begins the sorting algorithm to start a tourney!!");
+							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!openregistration[/b][/color] = Allows users to use the !rankme command.");
+							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!closeregistration[/b][/color] = Disllows users to use the !rankme command.");
 						}
 					}
 					if (e.getMessage().toLowerCase().contains("hey " + botName.toLowerCase()) && e.getInvokerName().toLowerCase().equals("miyosaki")){
-						api.sendChannelMessage("Hey Miyosuki! I'm the coolest bot ever.");
+						api.sendChannelMessage("Hey Miyosaki! I'm the coolest bot ever.");
 					}
 					if (e.getMessage().toLowerCase().contains("!kill") && admins.toString().contains(e.getInvokerName())){
 						alive = false;
 						api.sendServerMessage("I dead.... " + e.getInvokerName() + " Killed me......");
 					}
-					if (e.getMessage().toLowerCase().contains("!kill") && admins.toString().contains(e.getInvokerName())){
-						alive = false;
-						api.sendServerMessage("I dead.... " + e.getInvokerName() + " Killed me......");
-					}
-					if (e.getMessage().toLowerCase().contains("!enabletourney")){
+					if (e.getMessage().toLowerCase().equals("!enabletourney") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase())){
 						tourney = true;
+						api.sendPrivateMessage(e.getInvokerId(), "Tournament enabled!");
+					}
+					if (e.getMessage().toLowerCase().equals("!tourneyisover") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase())){
+						tourney = false;
+						api.sendPrivateMessage(e.getInvokerId(), "Tourney has finished");
+					}
+					if (e.getMessage().toLowerCase().equals("!openregistration") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase())){
+						tourney = false;
+						api.sendPrivateMessage(e.getInvokerId(), "Tourney has finished");
+					}
+					if (e.getMessage().toLowerCase().equals("!closeregistration") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase())){
+						tourney = false;
+						api.sendPrivateMessage(e.getInvokerId(), "Tourney has finished");
 					}
 					
 					//Add more actions while alive above HERE
 					//Tourney sorting
+					//
+					//
+					//TODO Finish browning sorting algorithms
+					//
+					//
+					if (e.getInvokerName().equals(tourneyStarter.toLowerCase())){
+						tourneyUsers = api.getServerGroupClients(verifiedGroupId).size();
+						
+						if (e.getMessage().toLowerCase().equals("snakedraft") || e.getMessage().toLowerCase().equals("snake draft")){
+							//SNAKE DRAFT SORTING GOES HERE
+							api.sendServerMessage("The tourney has begun!! Captains for the snake draft are now being chosen!!!");
+							//TODO Find a cascading message?
+							//TODO Find a way for multi line input?????
+							api.sendPrivateMessage(1, "");
+							
+						} else if (e.getMessage().toLowerCase().equals("random")){
+							//STRATIFIED RANDOM TOURNEY SORT GOES HERE
+							api.sendServerMessage("The tourney has begun!! Random teams are now being thrown together!!!");
+							//tourneyUsers = api.getChannelGroupClientsByChannelId(3).toString();
+							//TODO Continue
+							api.sendServerMessage("Ladies and Gents, we have ourselves " + tourneyUsers + " tournement participants tonight!");
+							numberOfTeams = tourneyUsers/5;
+							api.sendServerMessage("Tonight, we will have " + numberOfTeams + " teams of 5.");
+							while (!api.getServerGroupClients(Tchallenger).isEmpty()){
+								list = api.getServerGroupClients(Tchallenger);
+								Collections.shuffle(list);
+								
+								switch (rng.nextInt(list.size()) + 1) {
+									case 1: if (api.getServerGroupClients(Team1).size() < 5) {
+										list.get(1);
+									}
+								}
+							}
+							
+						} else if (e.getMessage().toLowerCase().equals("exit")){
+							continueTourneyStart = false;
+							tourneyStarter = "";
+						} else if (continueTourneyStart){
+							api.sendPrivateMessage(e.getInvokerId(), "Sorry, you have not entered a valid option, try again or type 'exit'");
+						}
+					}
+					
 					//Renaming input process
 					if (e.getInvokerName().equals(nameId)){
 						botName = e.getMessage();
@@ -130,7 +257,8 @@ public class TS3_Bot {
 						api.sendPrivateMessage(e.getInvokerId(), "My new name is " + botName);
 						nameId = "";
 					}
-					//COMMENCE RANKIGN PROCESSSSS Place other commands above here....
+					//COMMENCE RANKIGN PROCESSSSS Place other commands above here...
+					//TODO Add more instances so more can rank at a time (At least 5?)
 					if (e.getInvokerName().equals(ranking)){
 						exit = false;
 						if (e.getMessage().toLowerCase().contains("exit")){
@@ -173,18 +301,32 @@ public class TS3_Bot {
 							
 							if (tier.contains("Challenger")){
 								api.addClientToServerGroup(challenger, e.getInvokerId());
+								api.addClientToServerGroup(Tchallenger, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), challengerWR);
 							}else if (tier.contains("Master")){
 								api.addClientToServerGroup(master, e.getInvokerId());
+								api.addClientToServerGroup(Tmaster, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), masterWR);
 							}else if (tier.contains("Diamond")){
 								api.addClientToServerGroup(diamond, e.getInvokerId());
+								api.addClientToServerGroup(Tdiamond, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), diamondWR);
 							}else if (tier.contains("Platinum")){
 								api.addClientToServerGroup(platinum, e.getInvokerId());
+								api.addClientToServerGroup(Tplatinum, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), platWR);
 							}else if (tier.contains("Gold")){
 								api.addClientToServerGroup(gold, e.getInvokerId());
+								api.addClientToServerGroup(Tgold, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), goldWR);
 							}else if (tier.contains("Silver")){
 								api.addClientToServerGroup(silver, e.getInvokerId());
+								api.addClientToServerGroup(Tsilver, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), silverWR);
 							}else if (tier.contains("Bronze")){
 								api.addClientToServerGroup(bronze, e.getInvokerId());
+								api.addClientToServerGroup(Tbronze, e.getInvokerId());
+								api.moveClient(e.getInvokerId(), bronzeWR);
 							}else if (tier.contains("null") || tier.contains("")){
 								api.addClientToServerGroup(unRanked, e.getInvokerId());
 							}
@@ -196,7 +338,7 @@ public class TS3_Bot {
 							ranking = "";
 						}
 					}
-					if (e.getMessage().toLowerCase().contains("!rankme")){
+					if (e.getMessage().toLowerCase().contains("!rankme") && registerEnabled){
 						api.sendPrivateMessage(e.getInvokerId(), "Please enter your League of Legends summoner name (not login):");
 						api.sendPrivateMessage(e.getInvokerId(), "Or type 'exit' to exit");
 						ranking = e.getInvokerName();
@@ -204,6 +346,15 @@ public class TS3_Bot {
 					if (e.getMessage().toLowerCase().contains("!name") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase())){
 						nameId = e.getInvokerName();
 						api.sendPrivateMessage(e.getInvokerId(), "Yay! A name change! Please enter my new name:");
+					}
+					if (e.getMessage().toLowerCase().contains("!startthetourney") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase()) && !tourney){
+						api.sendPrivateMessage(e.getInvokerId(), "Awesome! Tourrneeyyy TIMEEEEEEEEEE!! Select a mode, type:");
+						api.sendPrivateMessage(e.getInvokerId(), "Snake Draft  Random Captians assigned and then allowed to draf platyers to their teams");
+						api.sendPrivateMessage(e.getInvokerId(), "Stratified  Random (Each team will (generally) contain a Bronze, Silver, Gold, Plat and Diamond/Master/Challenger");
+						tourneyStarter = e.getInvokerName();
+						continueTourneyStart = true;
+					} else if (e.getMessage().toLowerCase().equals("!startthetourney") && admins.toString().toLowerCase().contains(e.getInvokerName().toLowerCase()) && tourney){
+						api.sendPrivateMessage(e.getInvokerId(), "Sorry, a tourney must either be in process, or some has yet to say !tourneyisover");
 					}
 					//Add more actions while alive above HERE
 				}else if (e.getMessage().toLowerCase().contains("!revive") && admins.toString().contains(e.getInvokerName()) && !e.getInvokerName().toLowerCase().equals(botName.toLowerCase())){
