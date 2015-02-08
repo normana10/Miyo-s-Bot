@@ -85,6 +85,11 @@ public class TS3_Bot {
 	static int Team13 = 39;
 	static int Team14 = 40;
 	static int Team15 = 41;
+	static int Team16 = 42;
+	static int Team17 = 43;
+	static int Team18 = 44;
+	static int Team19 = 45;
+	static int Team20 = 46;
 	
 	//Tier Channel Ids
 		//Division Waiting Rooms
@@ -111,6 +116,11 @@ public class TS3_Bot {
 	static int team13 = 42;
 	static int team14 = 43;
 	static int team15 = 44;
+	static int team16 = 45;
+	static int team17 = 46;
+	static int team18 = 47;
+	static int team19 = 48;
+	static int team20 = 49;
 	
 		//TeamFull Booleans
 	static boolean team1Full = false;
@@ -128,6 +138,11 @@ public class TS3_Bot {
 	static boolean team13Full = false;
 	static boolean team14Full = false;
 	static boolean team15Full = false;
+	static boolean team16Full = false;
+	static boolean team17Full = false;
+	static boolean team18Full = false;
+	static boolean team19Full = false;
+	static boolean team20Full = false;
 	
 	static boolean forwardChallenger = true;
 	static boolean forwardMaster = false;
@@ -159,6 +174,7 @@ public class TS3_Bot {
 		
 		final TS3Api api = query.getApi();
 		api.selectVirtualServerByPort(9987);
+		//api.
 		api.setNickname("Botbot");
 		api.sendServerMessage("Botbot Online!");
 		final List<ServerGroupClient> admins = api.getServerGroupClients(6);
@@ -230,6 +246,7 @@ public class TS3_Bot {
 						api.sendPrivateMessage(e.getInvokerId(), "Your personal assistant");
 						api.sendPrivateMessage(e.getInvokerId(), "I can do the following things:");
 						api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!rankme[/b][/color] = Assigns you a ranked group, if registration is open.");
+						api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!credit[/b][/color] = Tells you orme about this bot.");
 						//api.sendPrivateMessage(e.getInvokerId(), "");
 						if (admins.toString().contains(e.getInvokerUserId())){
 							api.sendPrivateMessage(e.getInvokerId(), "[b][color=red]Bot Mod commands only:");
@@ -241,6 +258,11 @@ public class TS3_Bot {
 							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!openregistration[/b][/color] = Allows users to use the !rankme command.");
 							api.sendPrivateMessage(e.getInvokerId(), "[color=green][b]!closeregistration[/b][/color] = Disllows users to use the !rankme command.");
 						}
+					}
+					if (e.getMessage().toLowerCase().equals("!credit")){
+						api.sendPrivateMessage(e.getInvokerId(), "This bot was created by Norm over the course of 1-2 weeks.");
+						api.sendPrivateMessage(e.getInvokerId(), "If you ever see Norm and have an idea or want a new command for the bot, or just"
+								+ " want a bot for oyur own TS Server, Norm doesn't bite, just poke/message/or yell at him. He's a cool kid.");
 					}
 					if (e.getMessage().toLowerCase().contains("hey " + botName.toLowerCase()) && e.getInvokerName().toLowerCase().equals("miyosaki")){
 						api.sendChannelMessage("Hey Miyosaki! I'm the coolest bot ever.");
@@ -272,6 +294,11 @@ public class TS3_Bot {
 						emptyServerGroup(Team13, api);
 						emptyServerGroup(Team14, api);
 						emptyServerGroup(Team15, api);
+						emptyServerGroup(Team16, api);
+						emptyServerGroup(Team17, api);
+						emptyServerGroup(Team18, api);
+						emptyServerGroup(Team19, api);
+						emptyServerGroup(Team20, api);
 						emptyServerGroup(Tchallenger, api);
 						emptyServerGroup(Tmaster, api);
 						emptyServerGroup(Tdiamond, api);
@@ -295,6 +322,11 @@ public class TS3_Bot {
 						team13Full = false;
 						team14Full = false;
 				 		team15Full = false;
+				 		team16Full = false;
+				 		team17Full = false;
+				 		team18Full = false;
+				 		team19Full = false;
+				 		team20Full = false;
 						
 						api.sendPrivateMessage(e.getInvokerId(), "Tourney has finished");
 					}
@@ -525,11 +557,13 @@ public class TS3_Bot {
 		}
 	}	
 	public void randomSortATier (int currentGroup, int numberOfTeams , TS3Api api) {
+		//TODO Fix old rando sorting to 20 tems? Not used though......
 		Random rng = new Random();
 		//List<?> list = api.getServerGroupClients(currentGroup).g;
 		boolean teamsFull = false;
 		if(team1Full && team2Full && team3Full && team4Full && team5Full && team6Full && team7Full && team8Full &&
-				 team9Full && team10Full && team11Full && team12Full && team13Full && team14Full && team15Full){
+				 team9Full && team10Full && team11Full && team12Full && team13Full && team14Full && team15Full && team16Full
+				 && team17Full && team18Full && team19Full && team20Full){
 			teamsFull = true;
 		}
 		while (api.getServerGroupClients(currentGroup).size() > 0 && !teamsFull){
@@ -759,7 +793,8 @@ public class TS3_Bot {
 		while(api.getServerGroupClients(currentGroup).size() > 0 && !teamsFull){
 			
 			if(team1Full && team2Full && team3Full && team4Full && team5Full && team6Full && team7Full && team8Full &&
-					 team9Full && team10Full && team11Full && team12Full && team13Full && team14Full && team15Full){
+					 team9Full && team10Full && team11Full && team12Full && team13Full && team14Full && team15Full && team16Full
+					 && team17Full && team18Full && team19Full && team20Full){
 				teamsFull = true;
 			}//TODO what if not 15 teams? No teamfull
 			
@@ -1020,20 +1055,105 @@ public class TS3_Bot {
 			if (api.getServerGroupClients(Team15).size() >= 5){
 				team15Full = true;
 			}
-			if (!team15Full && teamOn == Team15 && numberOfTeams >= 15) {
+			if (!team15Full && teamOn == Team15 && numberOfTeams >= 14) {
 				serverGroup = api.getServerGroupClients(currentGroup);
 				api.addClientToServerGroup(Team15, serverGroup.get(0).getClientDatabaseId());
 				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team15);
 				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
 				if (teamOn != lastTeam && sortingForward){
-					teamOn = Team15;
+					teamOn = Team16;
 				} else if (teamOn == lastTeam && sortingForward){
 					sortingForward = false;
 					teamOn = Team15;
 				} else if (!sortingForward){
-					teamOn = Team15;
-				} else if (teamOn == lastTeam && !sortingForward){
 					teamOn = Team14;
+				}
+			}//Tem 16
+			if (api.getServerGroupClients(Team16).size() >= 5){
+				team16Full = true;
+			}
+			if (!team16Full && teamOn == Team16 && numberOfTeams >= 14) {
+				serverGroup = api.getServerGroupClients(currentGroup);
+				api.addClientToServerGroup(Team16, serverGroup.get(0).getClientDatabaseId());
+				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team16);
+				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
+				if (teamOn != lastTeam && sortingForward){
+					teamOn = Team17;
+				} else if (teamOn == lastTeam && sortingForward){
+					sortingForward = false;
+					teamOn = Team16;
+				} else if (!sortingForward){
+					teamOn = Team15;
+				}
+			}//Tem 17
+			if (api.getServerGroupClients(Team17).size() >= 5){
+				team17Full = true;
+			}
+			if (!team17Full && teamOn == Team17 && numberOfTeams >= 14) {
+				serverGroup = api.getServerGroupClients(currentGroup);
+				api.addClientToServerGroup(Team17, serverGroup.get(0).getClientDatabaseId());
+				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team17);
+				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
+				if (teamOn != lastTeam && sortingForward){
+					teamOn = Team18;
+				} else if (teamOn == lastTeam && sortingForward){
+					sortingForward = false;
+					teamOn = Team17;
+				} else if (!sortingForward){
+					teamOn = Team16;
+				}
+			}//Tem 18
+			if (api.getServerGroupClients(Team18).size() >= 5){
+				team18Full = true;
+			}
+			if (!team18Full && teamOn == Team18 && numberOfTeams >= 14) {
+				serverGroup = api.getServerGroupClients(currentGroup);
+				api.addClientToServerGroup(Team18, serverGroup.get(0).getClientDatabaseId());
+				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team18);
+				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
+				if (teamOn != lastTeam && sortingForward){
+					teamOn = Team19;
+				} else if (teamOn == lastTeam && sortingForward){
+					sortingForward = false;
+					teamOn = Team18;
+				} else if (!sortingForward){
+					teamOn = Team17;
+				}
+			}//Tem 19
+			if (api.getServerGroupClients(Team19).size() >= 5){
+				team19Full = true;
+			}
+			if (!team19Full && teamOn == Team19 && numberOfTeams >= 14) {
+				serverGroup = api.getServerGroupClients(currentGroup);
+				api.addClientToServerGroup(Team19, serverGroup.get(0).getClientDatabaseId());
+				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team19);
+				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
+				if (teamOn != lastTeam && sortingForward){
+					teamOn = Team20;
+				} else if (teamOn == lastTeam && sortingForward){
+					sortingForward = false;
+					teamOn = Team19;
+				} else if (!sortingForward){
+					teamOn = Team18;
+				}
+			}//Tem 20
+			if (api.getServerGroupClients(Team20).size() >= 5){
+				team20Full = true;
+			}
+			if (!team20Full && teamOn == Team20 && numberOfTeams >= 15) {
+				serverGroup = api.getServerGroupClients(currentGroup);
+				api.addClientToServerGroup(Team20, serverGroup.get(0).getClientDatabaseId());
+				api.moveClient(getCLIDFromNick(serverGroup.get(0).getNickname(), api), team20);
+				api.removeClientFromServerGroup(currentGroup, serverGroup.get(0).getClientDatabaseId());
+				if (teamOn != lastTeam && sortingForward){
+					teamOn = Team20;
+				} else if (teamOn == lastTeam && sortingForward){
+					sortingForward = false;
+					teamOn = Team20;
+				} else if (!sortingForward){
+					teamOn = Team19;
+				} else if (teamOn == lastTeam && !sortingForward){
+					teamOn = Team19;
 				}
 			}
 		}
@@ -1085,6 +1205,16 @@ public class TS3_Bot {
 			lastTeam = Team14;
 		} else if (numberOfTeams == 15){
 			lastTeam = Team15;
+		} else if (numberOfTeams == 16){
+			lastTeam = Team16;
+		} else if (numberOfTeams == 17){
+			lastTeam = Team17;
+		} else if (numberOfTeams == 18){
+			lastTeam = Team18;
+		} else if (numberOfTeams == 19){
+			lastTeam = Team19;
+		} else if (numberOfTeams == 20){
+			lastTeam = Team20;
 		}
 		
 		return lastTeam;
